@@ -1,20 +1,20 @@
 {
   dream2nix,
   config,
-  lib,
   ...
-}: let
+}: {
+  imports = [
+    ./interface.nix
+    dream2nix.modules.dream2nix.buildPythonPackage
+  ];
+
   pyproject =
     builtins.fromTOML
     (builtins.readFile (config.mkDerivation.src + /pyproject.toml));
-in {
-  imports = [
-    dream2nix.modules.dream2nix.pip
-  ];
 
   mkDerivation = {
     buildInputs =
-      pyproject.build-system.requires
+      config.pyproject.build-system.requires
       or [config.deps.python.pkgs.setuptools];
   };
 
@@ -22,9 +22,6 @@ in {
     pyproject = true;
   };
 
-  name = pyproject.project.name;
-  version = pyproject.project.version;
-
-  pip.requirementsList = pyproject.project.dependencies;
-  pip.flattenDependencies = true;
+  name = config.pyproject.project.name;
+  version = config.pyproject.project.version;
 }

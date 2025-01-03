@@ -1,0 +1,12 @@
+[project]
+name = "hello"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # This dependency has a problem when trying to build it with normal uv
+    # as you can see in https://github.com/astral-sh/uv/issues/10233, so it
+    # is a good example on how Nix can help you to solve this kind of problem
+    "gevent==21.8.0"
+]
